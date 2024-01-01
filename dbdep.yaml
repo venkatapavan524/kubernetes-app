@@ -33,7 +33,7 @@ spec:
       volumes:
         - name: myvol
           awsElasticBlockStore:
-            volumeID: vol-0986c8535dee96d4b
+            volumeID: vol-07bc222ed87fb373a
             fsType: ext4
 
       initContainers:
