@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dbdep
+  labels:
+    app: dbdep
+spec:
+  selector:
+    matchLabels:
+      app: dbdep
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: dbdep
+    spec:
+      containers:
+        - name: sqlcontainer
+          image: venkatapavan524/database
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: myvol
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  - name: app-secret
+                    key: db-pass
+      nodeSelector:
+        zone: us-east-1a
+      volumes:
+        - awsElasticBlockStore:
+            volumeID: vol-0986c8535dee96d4b
+            fsType: ext4
+      initContainers:
+        - name: busybox
+          image: busybox:latest
+          args:
+            - ["rm","rf","/var/lib/mysql/lost+found"]
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: myvol
+
+
