@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: rmqcontainer
-          image: rammitmq
+          image: rabbitmq
           ports:
             - containerPort: 15672
           env:
