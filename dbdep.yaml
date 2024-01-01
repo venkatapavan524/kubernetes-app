@@ -26,21 +26,24 @@ spec:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  - name: app-secret
-                    key: db-pass
+                  name: app-secret
+                  key: db-pass
       nodeSelector:
         zone: us-east-1a
       volumes:
-        - awsElasticBlockStore:
+        - name: myvol
+          awsElasticBlockStore:
             volumeID: vol-0986c8535dee96d4b
             fsType: ext4
+
       initContainers:
         - name: busybox
           image: busybox:latest
           args:
-            - ["rm","rf","/var/lib/mysql/lost+found"]
+            - ["rm","-rf","/var/lib/mysql/lost+found"]
           volumeMounts:
-            - mountPath: /var/lib/mysql
-              name: myvol
+            - name: myvol
+              mountPath: /var/lib/mysql
+
 
 
